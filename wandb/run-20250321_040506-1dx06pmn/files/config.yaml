@@ -1,0 +1,193 @@
+_wandb:
+    value:
+        cli_version: 0.18.7
+        m: []
+        python_version: 3.7.16
+        t:
+            "1":
+                - 1
+                - 55
+                - 105
+            "2":
+                - 1
+                - 55
+                - 105
+            "3":
+                - 13
+                - 16
+                - 23
+                - 55
+            "4": 3.7.16
+            "5": 0.18.7
+            "8":
+                - 2
+                - 5
+            "12": 0.18.7
+            "13": linux-x86_64
+GMM_components:
+    value: 1
+K:
+    value: 25
+MLP_dropout_keep_prob:
+    value: 0.9
+"N":
+    value: 1
+augment:
+    value: false
+batch_size:
+    value: 256
+dec_rnn_dim:
+    value: 128
+dynamic:
+    value:
+        PEDESTRIAN:
+            distribution: false
+            name: SingleIntegrator
+dynamic_edges:
+    value: "yes"
+edge_addition_filter:
+    value:
+        - 0.25
+        - 0.5
+        - 0.75
+        - 1
+edge_encoding:
+    value: true
+edge_influence_combine_method:
+    value: attention
+edge_removal_filter:
+    value:
+        - 1
+        - 0
+edge_state_combine_method:
+    value: sum
+enc_rnn_dim_edge:
+    value: 32
+enc_rnn_dim_edge_influence:
+    value: 32
+enc_rnn_dim_future:
+    value: 32
+enc_rnn_dim_history:
+    value: 32
+grad_clip:
+    value: 1
+incl_robot_node:
+    value: false
+k:
+    value: 1
+k_eval:
+    value: 25
+kl_crossover:
+    value: 400
+kl_decay_rate:
+    value: 0.99995
+kl_min:
+    value: 0.07
+kl_sigmoid_divisor:
+    value: 4
+kl_weight:
+    value: 100
+kl_weight_start:
+    value: 0
+learning_decay_rate:
+    value: 0.9999
+learning_rate:
+    value: 0.001
+learning_rate_style:
+    value: exp
+log_histograms:
+    value: false
+log_p_yt_xz_max:
+    value: 6
+map_encoder:
+    value:
+        PEDESTRIAN:
+            dropout: 0.5
+            heading_state_index: 6
+            hidden_channels:
+                - 10
+                - 20
+                - 10
+                - 1
+            map_channels: 3
+            masks:
+                - 5
+                - 5
+                - 5
+                - 5
+            output_size: 32
+            patch_size:
+                - 50
+                - 10
+                - 50
+                - 90
+            strides:
+                - 1
+                - 1
+                - 1
+                - 1
+maximum_history_length:
+    value: 5
+min_learning_rate:
+    value: 1e-05
+minimum_history_length:
+    value: 1
+node_freq_mult_eval:
+    value: false
+node_freq_mult_train:
+    value: false
+offline_scene_graph:
+    value: "yes"
+override_attention_radius:
+    value: []
+p_z_x_MLP_dims:
+    value: 32
+pred_state:
+    value:
+        PEDESTRIAN:
+            velocity:
+                - x
+                - "y"
+prediction_horizon:
+    value: 5
+q_z_xy_MLP_dims:
+    value: null
+rnn_kwargs:
+    value:
+        dropout_keep_prob: 0.75
+scene_freq_mult_eval:
+    value: false
+scene_freq_mult_train:
+    value: false
+scene_freq_mult_viz:
+    value: false
+state:
+    value:
+        PEDESTRIAN:
+            acceleration:
+                - x
+                - "y"
+            position:
+                - x
+                - "y"
+            velocity:
+                - x
+                - "y"
+tau_decay_rate:
+    value: 0.997
+tau_final:
+    value: 0.05
+tau_init:
+    value: 2
+use_map_encoding:
+    value: false
+use_z_logit_clipping:
+    value: true
+z_logit_clip_crossover:
+    value: 300
+z_logit_clip_divisor:
+    value: 5
+z_logit_clip_final:
+    value: 5
+z_logit_clip_start:
+    value: 0.05

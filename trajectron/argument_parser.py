@@ -133,7 +133,7 @@ parser.add_argument("--eval_device",
 parser.add_argument("--train_epochs",
                     help="number of iterations to train for",
                     type=int,
-                    default=200)
+                    default=100)
 
 parser.add_argument('--batch_size',
                     help='training batch size',
@@ -163,12 +163,12 @@ parser.add_argument('--eval_every',
 parser.add_argument('--vis_every',
                     help='how often to visualize during training, never if None',
                     type=int,
-                    default=100)
+                    default=200)
 
 parser.add_argument('--save_every',
                     help='how often to save during training, never if None',
                     type=int,
-                    default=100)
+                    default=200)
 
 # Additional
 parser.add_argument("--load_dir",
@@ -184,7 +184,7 @@ parser.add_argument('--max_num_neighbors',
 parser.add_argument('--contrastive_weight',
                     help='',
                     type=float,
-                    default=0.5)
+                    default=1.0)
 
 parser.add_argument('--contrastive_sampling',
                     help='',

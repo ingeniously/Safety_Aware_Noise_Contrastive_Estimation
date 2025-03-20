@@ -12,7 +12,7 @@ def plot_trajectories(ax,
                       histories_dict,
                       futures_dict,
                       line_alpha=0.7,
-                      line_width=0.2,
+                      line_width=0.8,
                       edge_width=2,
                       circle_edge_width=0.5,
                       node_circle_size=0.3,
@@ -29,7 +29,7 @@ def plot_trajectories(ax,
         if np.isnan(history[-1]).any():
             continue
 
-        ax.plot(history[:, 0], history[:, 1], 'k--')
+        ax.plot(history[:, 0], history[:, 1], 'b--')
 
         for sample_num in range(prediction_dict[node].shape[1]):
 
@@ -41,22 +41,22 @@ def plot_trajectories(ax,
                                 color=np.random.choice(cmap), alpha=0.8)
 
             ax.plot(predictions[batch_num, sample_num, :, 0], predictions[batch_num, sample_num, :, 1],
-                    color=cmap[node.type.value],
+                    color='k',
                     linewidth=line_width, alpha=line_alpha)
 
             ax.plot(future[:, 0],
                     future[:, 1],
-                    'w--',
+                    'b--',
                     path_effects=[pe.Stroke(linewidth=edge_width, foreground='k'), pe.Normal()])
 
             # Current Node Position
             circle = plt.Circle((history[-1, 0],
                                  history[-1, 1]),
                                 node_circle_size,
-                                facecolor='g',
+                                facecolor='k',
                                 edgecolor='k',
                                 lw=circle_edge_width,
-                                zorder=3)
+                                zorder=1)
             ax.add_artist(circle)
 
     ax.axis('equal')

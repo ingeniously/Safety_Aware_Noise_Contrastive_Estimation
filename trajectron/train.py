@@ -98,7 +98,7 @@ def main():
         hyperparams['override_attention_radius'] = args.override_attention_radius
         
     wandb.init(
-        project="test",  # Set your project name
+        project="MMSC",  # Set your project name
         config=hyperparams,    # Pass hyperparameters
         name=f"snce{args.log_tag}",  # Run name
     )

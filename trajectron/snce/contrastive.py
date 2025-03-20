@@ -12,7 +12,7 @@ class safetyNCE():
     safety contrastive loss, encourage the extracted motion representation to be aware of safetyly unacceptable events
     '''
 
-    def __init__(self, head_projection=None, encoder_sample=None, sampling='safety', horizon=10, temperature=0.1):
+    def __init__(self, head_projection=None, encoder_sample=None, sampling='safety', horizon=5, temperature=0.1):
         # encoders
         self.head_projection = head_projection
         self.encoder_sample = encoder_sample
