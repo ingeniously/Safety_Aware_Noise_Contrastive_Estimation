@@ -126,7 +126,7 @@ def main():
 		result = list()
 		for dataset in ['eth', 'hotel', 'univ', 'zara1', 'zara2']:
 			print("Dataset:", dataset)
-			foldername = 'experiments/pedestrians/models/snce_' + dataset + '_vel'
+			foldername = 'experiments/Agents/models/snce_' + dataset + '_vel'
 			(ade_vanilla, fde_vanilla, col_vanilla), (ade_snce, fde_snce, col_snce) = compare(foldername, args)
 			result.append([dataset, ade_vanilla, fde_vanilla, col_vanilla * 100, ade_snce, fde_snce, col_snce * 100, (1 - col_snce / col_vanilla) * 100 ])
 		df = pd.DataFrame(result, columns=['Dataset', 'ADE-Vanilla', 'FDE-Vanilla', 'COL-Vanilla', 'ADE-SNCE', 'FDE-SNCE', 'COL-SNCE', 'COL-Gain']).set_index('Dataset')
@@ -134,7 +134,7 @@ def main():
 		print(df)
 	else:
 		print("Dataset:", args.dataset)
-		foldername = 'experiments/pedestrians/models/snce_' + args.dataset + '_vel'
+		foldername = 'experiments/Agents/models/snce_' + args.dataset + '_vel'
 		compare(foldername, args)
 
 if __name__ == "__main__":

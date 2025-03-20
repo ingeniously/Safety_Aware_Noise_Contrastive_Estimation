@@ -17,8 +17,8 @@ echo 'SEED: '${SEED}
 MODEL=vel
 EPOCH=300
 
-PREFIX=experiments/pedestrians/models
-METHOD='social'
+PREFIX=experiments/Agents/models
+METHOD='safety'
 
 ###########################
 #		python

@@ -1,0 +1,1 @@
+{"Agent/latent/temp":1.994149923324585,"Agent/kl_weight":1.8163691759109497,"_timestamp":1.741950969490922e+09,"_step":0,"_runtime":32.91702517,"Agent/true_kl":0.005156933795660734,"Agent/latent/z_logit_clip":0.0836825966835022,"Agent/kl":0.07000000029802322,"_wandb":{"runtime":32}}

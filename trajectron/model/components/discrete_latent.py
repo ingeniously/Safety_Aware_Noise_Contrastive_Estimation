@@ -69,7 +69,7 @@ class DiscreteLatent(object):
         kl_minibatch = torch.mean(kl_separated, dim=0, keepdim=True)
 
         if log_writer is not None:
-            log_writer.add_scalar(prefix + '/true_kl', torch.sum(kl_minibatch), curr_iter)
+          '''  log_writer.add_scalar(prefix + '/true_kl', torch.sum(kl_minibatch), curr_iter)'''
 
         if self.kl_min > 0:
             kl_lower_bounded = torch.clamp(kl_minibatch, min=self.kl_min)
@@ -97,7 +97,7 @@ class DiscreteLatent(object):
         return np.eye(K).take(np.reshape(np.indices([K] * N), [N, -1]).T, axis=0).reshape(-1, N * K)  # [K**N, N*K]
 
     def summarize_for_tensorboard(self, log_writer, prefix, curr_iter):
-        log_writer.add_histogram(prefix + "/latent/p_z_x", self.p_dist.probs, curr_iter)
+       ''' log_writer.add_histogram(prefix + "/latent/p_z_x", self.p_dist.probs, curr_iter)
         log_writer.add_histogram(prefix + "/latent/q_z_xy", self.q_dist.probs, curr_iter)
         log_writer.add_histogram(prefix + "/latent/p_z_x_logits", self.p_dist.logits, curr_iter)
         log_writer.add_histogram(prefix + "/latent/q_z_xy_logits", self.q_dist.logits, curr_iter)
@@ -106,4 +106,4 @@ class DiscreteLatent(object):
                 for j in range(self.K):
                     log_writer.add_histogram(prefix + "/latent/q_z_xy_logit{0}{1}".format(i, j),
                                              self.q_dist.logits[:, i, j],
-                                             curr_iter)
+                                             curr_iter)'''

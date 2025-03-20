@@ -4,7 +4,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--conf",
                     help="path to json config file for hyperparameters",
                     type=str,
-                    default='/home/choi/social-nce-trajectron-plus-plus/experiments/pedestrians/models/eth_vel/config.json')
+                    default='/home/choi/Safety_Aware_Noise_Contrastive_Estimation/experiments/Agents/models/eth_vel/config.json')
 
 parser.add_argument("--debug",
                     help="disable all disk writing processes.",
@@ -13,7 +13,7 @@ parser.add_argument("--debug",
 parser.add_argument("--preprocess_workers",
                     help="number of processes to spawn for preprocessing",
                     type=int,
-                    default=0)
+                    default=5)
 
 
 # Model Parameters
@@ -54,7 +54,7 @@ parser.add_argument('--edge_removal_filter',
 
 parser.add_argument('--override_attention_radius',
                     action='append',
-                    help='Specify one attention radius to override. E.g. "PEDESTRIAN VEHICLE 10.0"',
+                    help='Specify one attention radius to override. E.g. "AGENT VEHICLE 10.0"',
                     default=[])
 
 parser.add_argument('--incl_robot_node',
@@ -97,7 +97,7 @@ parser.add_argument('--no_edge_encoding',
 parser.add_argument("--data_dir",
                     help="what dir to look in for data",
                     type=str,
-                    default='/home/choi/social-nce-trajectron-plus-plus/experiments/processed')
+                    default='/home/choi/Safety_Aware_Noise_Contrastive_Estimation/experiments/processed')
 
 parser.add_argument("--train_data_dict",
                     help="what file to load for training data",
@@ -112,7 +112,7 @@ parser.add_argument("--eval_data_dict",
 parser.add_argument("--log_dir",
                     help="what dir to save training information (i.e., saved models, logs, etc)",
                     type=str,
-                    default='/home/choi/social-nce-trajectron-plus-plus/experiments/logs')
+                    default='/home/choi/Safety_Aware_Noise_Contrastive_Estimation/experiments/logs')
 
 parser.add_argument("--log_tag",
                     help="tag for the log folder",
@@ -133,7 +133,7 @@ parser.add_argument("--eval_device",
 parser.add_argument("--train_epochs",
                     help="number of iterations to train for",
                     type=int,
-                    default=10)
+                    default=200)
 
 parser.add_argument('--batch_size',
                     help='training batch size',
@@ -158,17 +158,17 @@ parser.add_argument('--seed',
 parser.add_argument('--eval_every',
                     help='how often to evaluate during training, never if None',
                     type=int,
-                    default=1)
+                    default=100)
 
 parser.add_argument('--vis_every',
                     help='how often to visualize during training, never if None',
                     type=int,
-                    default=1)
+                    default=100)
 
 parser.add_argument('--save_every',
                     help='how often to save during training, never if None',
                     type=int,
-                    default=1)
+                    default=100)
 
 # Additional
 parser.add_argument("--load_dir",
@@ -184,12 +184,12 @@ parser.add_argument('--max_num_neighbors',
 parser.add_argument('--contrastive_weight',
                     help='',
                     type=float,
-                    default=1.0)
+                    default=0.5)
 
 parser.add_argument('--contrastive_sampling',
                     help='',
                     type=str,
-                    default='social')
+                    default='safety')
 
 parser.add_argument("--pretrain",
                     help="disable all disk writing processes.",

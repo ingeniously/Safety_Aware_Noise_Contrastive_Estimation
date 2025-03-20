@@ -3,7 +3,7 @@ import torch
 
 class EventSampler():
     '''
-    Different sampling strategies for social contrastive learning
+    Different sampling strategies for Safety contrastive learning
     '''
 
     def __init__(self, device='cuda'):
@@ -30,7 +30,7 @@ class EventSampler():
 
         return mask_valid.unsqueeze(-1)
 
-    def social_sampling(self, primary_curr, primary_next, neighbors_next):
+    def safety_sampling(self, primary_curr, primary_next, neighbors_next):
         '''
         Draw negative samples based on regions of other agents in the future
         '''

@@ -7,12 +7,12 @@ import matplotlib
 matplotlib.use('Agg')
 
 
-class SocialNCE():
+class safetyNCE():
     '''
-    Social contrastive loss, encourage the extracted motion representation to be aware of socially unacceptable events
+    safety contrastive loss, encourage the extracted motion representation to be aware of safetyly unacceptable events
     '''
 
-    def __init__(self, head_projection=None, encoder_sample=None, sampling='social', horizon=3, temperature=0.1):
+    def __init__(self, head_projection=None, encoder_sample=None, sampling='safety', horizon=10, temperature=0.1):
         # encoders
         self.head_projection = head_projection
         self.encoder_sample = encoder_sample
@@ -26,12 +26,12 @@ class SocialNCE():
 
     def loss(self, primary_prev, neighbors_prev, primary_next, neighbors_next, feat):
         '''
-        Social NCE Loss
+        safety NCE Loss
         '''
 
         # sampling
-        if self.sampling == 'social':
-            sample_pos, sample_neg, mask_valid = self.sampler.social_sampling(
+        if self.sampling == 'safety':
+            sample_pos, sample_neg, mask_valid = self.sampler.safety_sampling(
                 primary_prev[:, -1:, ], primary_next, neighbors_next)
         elif self.sampling == 'local':
             sample_pos, sample_neg, mask_valid = self.sampler.local_sampling(

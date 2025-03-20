@@ -1,0 +1,1 @@
+{"_runtime":128.699946336,"Agent/log_likelihood":9.79306411743164,"_timestamp":1.742187028688017e+09,"train/learning_rate":0.0009708323524791849,"Agent/loss":-5.855877876281738,"Agent/kl":0.0791015625,"_wandb":{"runtime":128},"train/loss":-5.855877876281738,"_step":295,"Agent/true_kl":0.0791015625}

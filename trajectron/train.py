@@ -10,7 +10,6 @@ import pathlib
 import warnings
 from tqdm import tqdm
 import visualization
-
 import evaluation
 import matplotlib
 matplotlib.use('Agg')
@@ -20,10 +19,10 @@ from model.trajectron import Trajectron
 from model.model_registrar import ModelRegistrar
 from model.model_utils import cyclical_lr
 from model.dataset import EnvironmentDataset, collate
-from tensorboardX import SummaryWriter
+import wandb
 # torch.autograd.set_detect_anomaly(True)
 
-from snce.contrastive import SocialNCE
+from snce.contrastive import safetyNCE
 from snce.model import ProjHead, EventEncoder
 
 np.set_printoptions(precision=2, suppress=True)
@@ -64,7 +63,7 @@ def seed_worker(worker_id):                 # https://pytorch.org/docs/stable/no
     random.seed(worker_seed)
 
 def main():
-    
+
     # Load hyperparameters from json
     if args.load_dir and os.path.exists(args.load_dir):
         print(f"Loaded hyperparams of the pretrained model from {args.load_dir}")
@@ -97,7 +96,12 @@ def main():
         hyperparams['use_map_encoding'] = args.map_encoding
         hyperparams['augment'] = args.augment
         hyperparams['override_attention_radius'] = args.override_attention_radius
-
+        
+    wandb.init(
+        project="test",  # Set your project name
+        config=hyperparams,    # Pass hyperparameters
+        name=f"snce{args.log_tag}",  # Run name
+    )
     print('-----------------------')
     print('| TRAINING PARAMETERS |')
     print('-----------------------')
@@ -132,8 +136,42 @@ def main():
             # Save config to model directory
             with open(os.path.join(model_dir, 'config.json'), 'w') as conf_json:
                 json.dump(hyperparams, conf_json)
-        print(f"Logging to: {model_dir}")
-        log_writer = SummaryWriter(log_dir=model_dir)
+
+        class WandbLogger:
+          def add_scalar(self, tag, scalar_value, global_step):
+              wandb.log({tag: scalar_value}, step=global_step)
+        
+          def add_figure(self, tag, figure, global_step):
+              wandb.log({tag: wandb.Image(figure)}, step=global_step)
+        
+          def add_histogram(self, tag, values, global_step):
+              # Handle different input types
+              if isinstance(values, torch.Tensor):
+                  values = values.cpu().numpy()
+              elif isinstance(values, list):
+                  values = np.array(values)
+              elif isinstance(values, np.ndarray):
+                  pass
+              else:
+                  print(f"Warning: Unsupported type for histogram: {type(values)}")
+                  return
+            
+              try:
+                 # Filter out nan and inf values
+                  values = values[~np.isnan(values)]
+                  values = values[~np.isinf(values)]
+            
+                  if len(values) > 0:
+                      wandb.log({
+                          f"{tag}_hist": wandb.Histogram(values),
+                          f"{tag}_mean": np.mean(values),
+                          f"{tag}_std": np.std(values),
+                          f"{tag}_min": np.min(values),
+                          f"{tag}_max": np.max(values)
+                      }, step=global_step)
+              except Exception as e:
+                  print(f"Warning: Could not log histogram for {tag}: {e}")
+        log_writer = WandbLogger()
 
     # Load training and evaluation environments and scenes
     train_scenes = []
@@ -247,7 +285,7 @@ def main():
     print('contrastive_sampling:', args.contrastive_sampling)
     head_projection = ProjHead(feat_dim=128, hidden_dim=32, head_dim=8).to(args.device)
     encoder_sample = EventEncoder(hidden_dim=8, head_dim=8).to(args.device)
-    snce = SocialNCE(head_projection=head_projection, encoder_sample=encoder_sample, sampling=args.contrastive_sampling)
+    snce = safetyNCE(head_projection=head_projection, encoder_sample=encoder_sample, sampling=args.contrastive_sampling)
 
     #################################
 
@@ -323,14 +361,16 @@ def main():
     #           TRAINING            #
     #################################
     curr_iter_node_type = {node_type: 0 for node_type in train_data_loader.keys()}
+    global_step = 0
     for epoch in range(1, args.train_epochs + 1):
         model_registrar.to(args.device)
         train_dataset.augment = args.augment
         for node_type, data_loader in train_data_loader.items():
             curr_iter = curr_iter_node_type[node_type]
             pbar = tqdm(data_loader, ncols=80)
-            for batch in pbar:              
-                trajectron.set_curr_iter(curr_iter)
+            for batch in pbar:
+                global_step += 1
+                trajectron.set_curr_iter(global_step)
                 trajectron.step_annealers(node_type)
                 optimizer[node_type].zero_grad()
                 train_loss, loss_task, loss_nce = trajectron.train_loss(batch, node_type)
@@ -346,10 +386,10 @@ def main():
                 lr_scheduler[node_type].step()
 
                 if not args.debug:
-                    log_writer.add_scalar(f"{node_type}/train/learning_rate",
+                    log_writer.add_scalar(f"train/learning_rate",
                                           lr_scheduler[node_type].get_last_lr()[0],
-                                          curr_iter)
-                    log_writer.add_scalar(f"{node_type}/train/loss", train_loss, curr_iter)
+                                          global_step)
+                    log_writer.add_scalar(f"train/loss", train_loss, global_step)
 
                 curr_iter += 1
             curr_iter_node_type[node_type] = curr_iter
@@ -448,18 +488,17 @@ def main():
                 # Calculate evaluation loss
                 for node_type, data_loader in eval_data_loader.items():
                     eval_loss = []
-                    print(f"Starting Evaluation @ epoch {epoch} for node type: {node_type}")
+                    print(f"Starting Evaluation @ epoch {epoch} for node type: Agent")
                     pbar = tqdm(data_loader, ncols=80)
                     for batch in pbar:
                         eval_loss_node_type = eval_trajectron.eval_loss(batch, node_type)
-                        pbar.set_description(f"Epoch {epoch}, {node_type} L: {eval_loss_node_type.item():.2f}")
-                        eval_loss.append({node_type: {'nll': [eval_loss_node_type]}})
+                        pbar.set_description(f"Epoch {epoch},  L: {eval_loss_node_type.item():.2f}")
+                        eval_loss.append({ node_type:{'nll': [eval_loss_node_type]}})
                         del batch
-
                     evaluation.log_batch_errors(eval_loss,
                                                 log_writer,
-                                                f"{node_type}/eval_loss",
-                                                epoch)
+                                                f"eval_loss",
+                                                global_step)
 
                 # Predict batch timesteps for evaluation dataset evaluation
                 eval_batch_errors = []
@@ -483,7 +522,7 @@ def main():
                 evaluation.log_batch_errors(eval_batch_errors,
                                             log_writer,
                                             'eval',
-                                            epoch,
+                                            global_step,
                                             bar_plot=['kde'],
                                             box_plot=['ade', 'fde'])
 
@@ -512,7 +551,7 @@ def main():
                 evaluation.log_batch_errors(eval_batch_errors_ml,
                                             log_writer,
                                             'eval/ml',
-                                            epoch)
+                                            global_step)
 
         if args.save_every is not None and args.debug is False and epoch % args.save_every == 0:
             if not args.pretrain:
@@ -524,7 +563,7 @@ def main():
     if args.pretrain:
         torch.save(head_projection.state_dict(), os.path.join(model_dir, 'head_projection.pt'))
         torch.save(encoder_sample.state_dict(), os.path.join(model_dir, 'encoder_sample.pt'))
-
+    wandb.finish()
+    
 if __name__ == '__main__':
     main()
-

@@ -357,8 +357,8 @@ class MultimodalGenerativeCVAE(object):
         if self.log_writer is not None:
             for annealed_var in self.annealed_vars:
                 if rgetattr(self, annealed_var) is not None:
-                    self.log_writer.add_scalar('%s/%s' % (str(self.node_type), annealed_var.replace('.', '/')),
-                                               rgetattr(self, annealed_var), self.curr_iter)
+                    '''self.log_writer.add_scalar('%s/%s' % (str('Agent'), annealed_var.replace('.', '/')),
+                                               rgetattr(self, annealed_var), self.curr_iter)'''
 
     def obtain_encoded_tensors(self,
                                mode,
@@ -477,7 +477,7 @@ class MultimodalGenerativeCVAE(object):
                 map_clone = map.clone()
                 map_patch = self.hyperparams['map_encoder'][self.node_type]['patch_size']
                 map_clone[:, :, map_patch[1] - 5:map_patch[1] + 5, map_patch[0] - 5:map_patch[0] + 5] = 1.
-                self.log_writer.add_images(f"{self.node_type}/cropped_maps", map_clone,
+                self.log_writer.add_images(f"{'Agent'}/cropped_maps", map_clone,
                                            self.curr_iter, dataformats='NCWH')
 
             encoded_map = self.node_modules[self.node_type + '/map_encoder'](map * 2. - 1., (mode == ModeKeys.TRAIN))
@@ -502,7 +502,7 @@ class MultimodalGenerativeCVAE(object):
 
         if self.hyperparams['use_map_encoding'] and self.node_type in self.hyperparams['map_encoder']:
             if self.log_writer:
-                self.log_writer.add_scalar(f"{self.node_type}/encoded_map_max",
+                self.log_writer.add_scalar(f"{'Agent'}/encoded_map_max",
                                            torch.max(torch.abs(encoded_map)), self.curr_iter)
             x_concat_list.append(encoded_map)
 
@@ -644,7 +644,7 @@ class MultimodalGenerativeCVAE(object):
                                            training=(mode == ModeKeys.TRAIN))
 
         elif self.hyperparams['edge_influence_combine_method'] == 'attention':
-            # Used in Social Attention (https://arxiv.org/abs/1710.04689)
+            # Used in safety Attention (https://arxiv.org/abs/1710.04689)
             if len(encoded_edges) == 0:
                 combined_edges = torch.zeros((batch_size, self.eie_output_dims), device=self.device)
 
@@ -934,9 +934,9 @@ class MultimodalGenerativeCVAE(object):
         z = self.latent.sample_q(sample_ct, mode)
 
         if mode == ModeKeys.TRAIN:
-            kl_obj = self.latent.kl_q_p(self.log_writer, '%s' % str(self.node_type), self.curr_iter)
-            if self.log_writer is not None:
-                self.log_writer.add_scalar('%s/%s' % (str(self.node_type), 'kl'), kl_obj, self.curr_iter)
+            kl_obj = self.latent.kl_q_p(self.log_writer, '%s' % str('Agent'), self.curr_iter)
+            '''   if self.log_writer is not None:
+                self.log_writer.add_scalar('%s/%s' % (str('Agent'), 'kl'), kl_obj, self.curr_iter)'''
         else:
             kl_obj = None
 
@@ -964,7 +964,7 @@ class MultimodalGenerativeCVAE(object):
                              prediction_horizon, num_samples, num_components=num_components)
         log_p_yt_xz = torch.clamp(y_dist.log_prob(labels), max=self.hyperparams['log_p_yt_xz_max'])
         if self.hyperparams['log_histograms'] and self.log_writer is not None:
-            self.log_writer.add_histogram('%s/%s' % (str(self.node_type), 'log_p_yt_xz'), log_p_yt_xz, self.curr_iter)
+          '''  self.log_writer.add_histogram('%s/%s' % (str('Agent'), 'log_p_yt_xz'), log_p_yt_xz, self.curr_iter)'''
 
         log_p_y_xz = torch.sum(log_p_yt_xz, dim=2)
         return log_p_y_xz, h_stack.squeeze()
@@ -1057,25 +1057,19 @@ class MultimodalGenerativeCVAE(object):
 
 
         if self.hyperparams['log_histograms'] and self.log_writer is not None:
-            self.log_writer.add_histogram('%s/%s' % (str(self.node_type), 'log_p_y_xz'),
+           ''' self.log_writer.add_histogram('%s/%s' % (str('Agent'), 'log_p_y_xz'),
                                           log_p_y_xz_mean,
-                                          self.curr_iter)
+                                          self.curr_iter)'''
 
         if self.log_writer is not None:
-            self.log_writer.add_scalar('%s/%s' % (str(self.node_type), 'mutual_information_q'),
-                                       mutual_inf_q,
-                                       self.curr_iter)
-            self.log_writer.add_scalar('%s/%s' % (str(self.node_type), 'mutual_information_p'),
-                                       mutual_inf_p,
-                                       self.curr_iter)
-            self.log_writer.add_scalar('%s/%s' % (str(self.node_type), 'log_likelihood'),
+            self.log_writer.add_scalar('%s/%s' % (str('Agent'), 'log_likelihood'),
                                        log_likelihood,
                                        self.curr_iter)
-            self.log_writer.add_scalar('%s/%s' % (str(self.node_type), 'loss'),
+            self.log_writer.add_scalar('%s/%s' % (str('Agent'), 'loss'),
                                        loss,
                                        self.curr_iter)
             if self.hyperparams['log_histograms']:
-                self.latent.summarize_for_tensorboard(self.log_writer, str(self.node_type), self.curr_iter)
+                self.latent.summarize_for_tensorboard(self.log_writer, str('Agent'), self.curr_iter)
         return loss, loss_task, loss_nce
 
     def eval_loss(self,

@@ -8,9 +8,9 @@
   "min_learning_rate": 0.00001,
   "learning_decay_rate": 0.9999,
 
-  "prediction_horizon": 12,
+  "prediction_horizon": 10,
   "minimum_history_length": 1,
-  "maximum_history_length": 8,
+  "maximum_history_length": 10,
 
   "map_encoder": {
     "PEDESTRIAN": {

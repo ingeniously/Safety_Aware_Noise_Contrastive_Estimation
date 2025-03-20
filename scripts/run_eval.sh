@@ -14,7 +14,7 @@ echo 'DATASET: '${DATASET}
 echo 'WEIGHT: '${WEIGHT}
 echo 'SEED: '${SEED}
 
-cd experiments/pedestrians
+cd experiments/Agents
 
 MODEL=vel
 PREFIX=models
@@ -27,7 +27,7 @@ OPTDIR=results
 
 for CKPT in {50..300..10}
 do
-	python evaluate.py --model ${FOLDERNAME} --checkpoint ${CKPT} --data ../processed/${DATASET}_test.pkl --output_path ${OPTDIR} --output_tag ${DATASET}_${MODE}_12 --node_type PEDESTRIAN --contrastive_weight ${WEIGHT} --seed ${SEED} || break
+	python evaluate.py --model ${FOLDERNAME} --checkpoint ${CKPT} --data ../processed/${DATASET}_test.pkl --output_path ${OPTDIR} --output_tag ${DATASET}_${MODE}_12 --node_type Agent --contrastive_weight ${WEIGHT} --seed ${SEED} || break
 done
 
 date

@@ -173,23 +173,23 @@ def log_batch_errors(batch_errors_list, log_writer, namespace, curr_iter, bar_pl
                 metric_batch_error.extend(batch_errors[node_type][metric])
 
             if len(metric_batch_error) > 0:
-                log_writer.add_histogram(f"{node_type.name}/{namespace}/{metric}", metric_batch_error, curr_iter)
-                log_writer.add_scalar(f"{node_type.name}/{namespace}/{metric}_mean", np.mean(metric_batch_error), curr_iter)
-                log_writer.add_scalar(f"{node_type.name}/{namespace}/{metric}_median", np.median(metric_batch_error), curr_iter)
+                log_writer.add_histogram(f"{metric}", metric_batch_error, curr_iter)
+                log_writer.add_scalar(f"{metric}_mean", np.mean(metric_batch_error), curr_iter)
+                log_writer.add_scalar(f"{metric}_median", np.median(metric_batch_error), curr_iter)
 
                 if metric in bar_plot:
                     pd = {'dataset': [namespace] * len(metric_batch_error),
                                   metric: metric_batch_error}
                     kde_barplot_fig, ax = plt.subplots(figsize=(5, 5))
                     visualization.visualization_utils.plot_barplots(ax, pd, 'dataset', metric)
-                    log_writer.add_figure(f"{node_type.name}/{namespace}/{metric}_bar_plot", kde_barplot_fig, curr_iter)
+                    log_writer.add_figure(f"{metric}_bar_plot", kde_barplot_fig, curr_iter)
 
                 if metric in box_plot:
                     mse_fde_pd = {'dataset': [namespace] * len(metric_batch_error),
                                   metric: metric_batch_error}
                     fig, ax = plt.subplots(figsize=(5, 5))
                     visualization.visualization_utils.plot_boxplots(ax, mse_fde_pd, 'dataset', metric)
-                    log_writer.add_figure(f"{node_type.name}/{namespace}/{metric}_box_plot", fig, curr_iter)
+                    log_writer.add_figure(f"{metric}_box_plot", fig, curr_iter)
 
 
 def print_batch_errors(batch_errors_list, namespace, curr_iter):
@@ -200,5 +200,5 @@ def print_batch_errors(batch_errors_list, namespace, curr_iter):
                 metric_batch_error.extend(batch_errors[node_type][metric])
 
             if len(metric_batch_error) > 0:
-                print(f"{curr_iter}: {node_type.name}/{namespace}/{metric}_mean", np.mean(metric_batch_error))
-                print(f"{curr_iter}: {node_type.name}/{namespace}/{metric}_median", np.median(metric_batch_error))
+                print(f"{curr_iter}: {metric}_mean", np.mean(metric_batch_error))
+                print(f"{curr_iter}: {metric}_median", np.median(metric_batch_error))
