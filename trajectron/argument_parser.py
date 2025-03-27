@@ -163,12 +163,12 @@ parser.add_argument('--eval_every',
 parser.add_argument('--vis_every',
                     help='how often to visualize during training, never if None',
                     type=int,
-                    default=200)
+                    default=100)
 
 parser.add_argument('--save_every',
                     help='how often to save during training, never if None',
                     type=int,
-                    default=200)
+                    default=100)
 
 # Additional
 parser.add_argument("--load_dir",

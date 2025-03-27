@@ -11,11 +11,11 @@ def plot_trajectories(ax,
                       prediction_dict,
                       histories_dict,
                       futures_dict,
-                      line_alpha=0.7,
-                      line_width=0.8,
+                      line_alpha=1,
+                      line_width=1,
                       edge_width=2,
-                      circle_edge_width=0.5,
-                      node_circle_size=0.3,
+                      circle_edge_width=0.6,
+                      node_circle_size=0.2,
                       batch_num=0,
                       kde=False):
 
@@ -29,24 +29,24 @@ def plot_trajectories(ax,
         if np.isnan(history[-1]).any():
             continue
 
-        ax.plot(history[:, 0], history[:, 1], 'b--')
+        ax.plot(history[:, 0], history[:, 1], 'k' )
 
         for sample_num in range(prediction_dict[node].shape[1]):
 
             if kde and predictions.shape[1] >= 50:
-                line_alpha = 0.2
+                line_alpha = 1.5
                 for t in range(predictions.shape[2]):
                     sns.kdeplot(predictions[batch_num, :, t, 0], predictions[batch_num, :, t, 1],
                                 ax=ax, shade=True, shade_lowest=False,
                                 color=np.random.choice(cmap), alpha=0.8)
 
             ax.plot(predictions[batch_num, sample_num, :, 0], predictions[batch_num, sample_num, :, 1],
-                    color='k',
+                    color='b',
                     linewidth=line_width, alpha=line_alpha)
 
             ax.plot(future[:, 0],
                     future[:, 1],
-                    'b--',
+                    'w--',
                     path_effects=[pe.Stroke(linewidth=edge_width, foreground='k'), pe.Normal()])
 
             # Current Node Position

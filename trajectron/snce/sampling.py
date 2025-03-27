@@ -131,8 +131,8 @@ class EventSampler:
         sample_pos += torch.rand(sample_pos.size(), device=self.device).sub(0.5) * self.noise_local
 
         # neighbor territory
-        radius = torch.rand(sample_pos.size(0), 10, device=self.device) * self.max_separation * 0.8 + self.max_separation * 0.2
-        theta = torch.rand(sample_pos.size(0), 10, device=self.device) * 2 * math.pi
+        radius = torch.rand(sample_pos.size(0), 20, device=self.device) * self.max_separation * 0.8 + self.max_separation * 0.2
+        theta = torch.rand(sample_pos.size(0), 20, device=self.device) * 2 * math.pi
         dx = radius * torch.cos(theta)
         dy = radius * torch.sin(theta)
 

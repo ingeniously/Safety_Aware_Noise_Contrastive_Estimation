@@ -1,0 +1,42 @@
+{
+  "os": "Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-debian-bookworm-sid",
+  "python": "3.7.16",
+  "startedAt": "2025-03-21T05:40:08.449997Z",
+  "program": "/home/choi/Safety_Aware_Noise_Contrastive_Estimation/trajectron/train.py",
+  "codePath": "trajectron/train.py",
+  "git": {
+    "remote": "https://github.com/ingeniously/Safety_Aware_Noise_Contrastive_Estimation.git",
+    "commit": "511f787d002529004e9830df635bdc66c6b94477"
+  },
+  "email": "bassoleyipene@gmail.com",
+  "root": "/home/choi/Safety_Aware_Noise_Contrastive_Estimation",
+  "host": "CHOI",
+  "username": "choi",
+  "executable": "/home/choi/anaconda3/envs/Safety/bin/python",
+  "codePathLocal": "trajectron/train.py",
+  "cpu_count": 16,
+  "cpu_count_logical": 32,
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "1081101176832",
+      "used": "349207990272"
+    }
+  },
+  "memory": {
+    "total": "33533259776"
+  },
+  "cpu": {
+    "count": 16,
+    "countLogical": 32
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA GeForce RTX 4090",
+      "memoryTotal": "25757220864",
+      "architecture": "Ada"
+    }
+  ],
+  "cudaVersion": "12.6"
+}
