@@ -23,7 +23,7 @@ We use the NASA Ames Prognostics Center of Excellence (PCoE) battery dataset. Th
 ![B0018 battery time series data features for all cycles.](images/Figure_3.png)
 *Figure 3: B0018 battery time series data features for all cycles.*
 
-![B0018 battery time series data features for the first cycle.](images/Figure_4.png)
+![B0018 battery time series data features for the first cycle.](images/Figure_4 .png)
 *Figure 4: B0018 battery time series data features for the first cycle.*
 
 ## Results
